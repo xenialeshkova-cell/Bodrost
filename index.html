@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Бодрость в долг: что делает с тобой энергетик</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F2F4FB;
+  --surface: #FFFFFF;
+  --ink: #1C2147;
+  --muted: #565C80;
+  --line: #CDD2EA;
+  --accent: #4555D0;
+  --accent-soft: #E3E6FB;
+  --warn: #B86A00;
+  --warn-soft: #FDF0DA;
+  --ok: #1F7A55;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14172E; --surface: #1D2142; --ink: #E9EBF8; --muted: #A6ABCD; --line: #343A66;
+    --accent: #929EFF; --accent-soft: #272C58; --warn: #F5B84F; --warn-soft: #3A3020; --ok: #6FD3A5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14172E; --surface: #1D2142; --ink: #E9EBF8; --muted: #A6ABCD; --line: #343A66;
+  --accent: #929EFF; --accent-soft: #272C58; --warn: #F5B84F; --warn-soft: #3A3020; --ok: #6FD3A5;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Golos Text", "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 1.0625rem; line-height: 1.6;
+}
+.wrap { max-width: 44rem; margin: 0 auto; padding: 0 1.25rem; }
+h1, h2, h3 { font-family: "Unbounded", "Golos Text", Arial, sans-serif; line-height: 1.15; margin: 0; }
+h2 { font-size: clamp(1.4rem, 4vw, 1.9rem); font-weight: 700; margin-bottom: 1rem; }
+h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .35rem; }
+p { margin: 0 0 1rem; }
+section { padding: 3.5rem 0; border-top: 1px solid var(--line); }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* hero */
+.hero { padding: 4rem 0 3rem; }
+.hero h1 { font-size: clamp(2.6rem, 11vw, 5.2rem); font-weight: 800; letter-spacing: -0.02em; }
+.hero h1 span { display: block; color: var(--muted); font-weight: 500; font-size: .42em; letter-spacing: 0; margin-top: .6rem; }
+.hero .lead { font-size: 1.2rem; max-width: 34rem; margin-top: 1.5rem; }
+.btn {
+  display: inline-block; margin-top: .5rem; padding: .85rem 1.3rem; border-radius: 999px;
+  background: var(--accent); color: var(--bg); text-decoration: none; font-weight: 600;
+}
+
+/* label */
+.label {
+  background: var(--surface); border: 2px solid var(--ink); border-radius: 6px; padding: 1rem 1.1rem;
+  font-variant-numeric: tabular-nums;
+}
+.label .row { display: grid; grid-template-columns: 9rem 1fr; gap: .75rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+.label .row:last-child { border-bottom: 0; }
+.label b { font-weight: 600; }
+.label .row span { color: var(--muted); }
+.label-title { font-family: "Unbounded", sans-serif; font-weight: 700; font-size: 1.1rem; padding-bottom: .6rem; border-bottom: 6px solid var(--ink); }
+@media (max-width: 480px) { .label .row { grid-template-columns: 1fr; gap: .15rem; } }
+
+/* calculator */
+.calc { background: var(--surface); border-radius: 20px; padding: 1.4rem; border: 1px solid var(--line); }
+.field { margin-bottom: 1.1rem; }
+.field label { display: flex; justify-content: space-between; gap: 1rem; font-weight: 500; margin-bottom: .35rem; }
+.field output { font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+select { width: 100%; font: inherit; padding: .6rem .7rem; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 480px) { .grid2 { grid-template-columns: 1fr; } }
+.result { margin-top: 1.4rem; padding-top: 1.4rem; border-top: 1px dashed var(--line); }
+.big { font-family: "Unbounded", sans-serif; font-weight: 800; font-size: clamp(2.2rem, 9vw, 3.4rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.big small { font-size: .4em; font-weight: 500; color: var(--muted); }
+.bar { height: 14px; background: var(--accent-soft); border-radius: 99px; overflow: hidden; margin: .8rem 0 .4rem; position: relative; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .3s; }
+.bar.over i { background: var(--warn); }
+.verdict { padding: .9rem 1rem; border-radius: 12px; margin-top: 1rem; background: var(--accent-soft); }
+.verdict.warn { background: var(--warn-soft); }
+.chart { width: 100%; height: auto; margin-top: 1rem; display: block; }
+.note { font-size: .9rem; color: var(--muted); margin-top: 1rem; }
+
+/* effects */
+.effects { display: grid; gap: 1.6rem; }
+.effect { padding-left: 1rem; border-left: 4px solid var(--accent); }
+.effect p { margin: 0; }
+
+ul.plain { padding-left: 1.2rem; margin: 0; }
+ul.plain li { margin-bottom: .5rem; }
+.law { background: var(--ink); color: var(--bg); border-radius: 20px; padding: 1.5rem; }
+.law h2 { color: var(--bg); }
+.law p:last-child { margin-bottom: 0; }
+footer { padding: 3rem 0 4rem; border-top: 1px solid var(--line); font-size: .9rem; color: var(--muted); }
+footer ol { padding-left: 1.2rem; }
+footer li { margin-bottom: .4rem; }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header class="hero">
+    <h1>Бодрость в долг<span>что делает с организмом банка энергетика</span></h1>
+    <p class="lead">Энергетик не даёт сил. Он одалживает их у твоего сна и нервной системы, а потом возвращает долг с процентами. Ниже коротко о том, как это работает, и калькулятор, где можно посчитать всё под себя.</p>
+    <a class="btn" href="#calc">Посчитать для себя</a>
+  </header>
+
+  <section>
+    <h2>Что на самом деле в банке</h2>
+    <p>Составы у разных марок похожи. Если перевести этикетку на понятный язык, получится примерно так:</p>
+    <div class="label" role="table" aria-label="Состав энергетика простыми словами">
+      <div class="label-title">Состав, честная версия</div>
+      <div class="row" role="row"><b role="cell">Кофеин</b><span role="cell">Главный бодрящий компонент. В банке 0,5 л его может быть от 75 до 200 мг.</span></div>
+      <div class="row" role="row"><b role="cell">Сахар</b><span role="cell">В классических вкусах часто больше 50 г на большую банку. Это две дневные нормы ВОЗ.</span></div>
+      <div class="row" role="row"><b role="cell">Гуарана</b><span role="cell">Растение, в семенах которого тоже есть кофеин.</span></div>
+      <div class="row" role="row"><b role="cell">Таурин</b><span role="cell">Аминокислота. Есть в мясе и рыбе, сама по себе не бодрит.</span></div>
+      <div class="row" role="row"><b role="cell">Витамины B</b><span role="cell">Если нормально ешь, лишние витамины энергии не добавят.</span></div>
+      <div class="row" role="row"><b role="cell">Мелким шрифтом</b><span role="cell">«Не рекомендуется детям». Это написано на каждой банке, где кофеина больше 150 мг на литр.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Почему кажется, что сил стало больше</h2>
+    <p>Пока ты не спишь, в мозге копится вещество аденозин. Он садится на свои рецепторы, и ты чувствуешь усталость.</p>
+    <p>Кофеин похож на аденозин. Он занимает те же рецепторы, но сигнал усталости не передаёт. Усталость никуда не делась, просто мозг временно её не слышит.</p>
+    <p>Через несколько часов кофеин уходит, и весь накопленный аденозин срабатывает разом. Отсюда резкий упадок сил, после которого рука тянется за второй банкой.</p>
+  </section>
+
+  <section id="calc">
+    <h2>Калькулятор: сколько это для тебя</h2>
+    <p>Подростку советуют не больше 3 мг кофеина на килограмм веса в день. Сон может испортиться уже от 1,5 мг/кг. Половина кофеина выводится из крови примерно за 5 часов.</p>
+    <div class="calc">
+      <div class="field">
+        <label for="w">Твой вес <output id="wOut">50 кг</output></label>
+        <input type="range" id="w" min="30" max="90" value="50">
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label for="v">Объём банки</label>
+          <select id="v">
+            <option value="250">0,25 л</option>
+            <option value="330">0,33 л</option>
+            <option value="450">0,45 л</option>
+            <option value="500" selected>0,5 л</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="c">Кофеин на этикетке</label>
+          <select id="c">
+            <option value="150">15 мг/100 мл</option>
+            <option value="200">20 мг/100 мл</option>
+            <option value="300">30 мг/100 мл</option>
+            <option value="320" selected>32 мг/100 мл</option>
+            <option value="350">35 мг/100 мл</option>
+            <option value="400">40 мг/100 мл</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="t">Когда выпил(а)</label>
+          <select id="t"></select>
+        </div>
+        <div class="field">
+          <label for="b">Когда ложишься спать</label>
+          <select id="b"></select>
+        </div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <div class="big" id="dose">160 <small>мг кофеина в банке</small></div>
+        <div class="bar" id="barWrap"><i id="bar" style="width:50%"></i></div>
+        <div id="pct">107 % от твоего дневного ориентира (150 мг)</div>
+        <div class="verdict" id="verdict"></div>
+        <svg class="chart" id="chart" viewBox="0 0 600 220" role="img" aria-label="Как кофеин выводится из крови по часам"></svg>
+      </div>
+      <p class="note">Это ориентир для здорового подростка, а не медицинская норма. Скорость, с которой выводится кофеин, у всех разная, а ещё он есть в чае, кофе, коле и шоколаде.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Что может пойти не так</h2>
+    <div class="effects">
+      <div class="effect"><h3>Сердце</h3><p>Пульс учащается, давление растёт, руки дрожат. Несколько банок подряд или энергетик перед тренировкой дают сердцу лишнюю нагрузку, а при скрытых проблемах возможны сбои ритма.</p></div>
+      <div class="effect"><h3>Сон</h3><p>Самый частый эффект. Подростку нужно 8–10 часов сна, а энергетик сокращает и портит сон. Утром ты разбит и снова тянешься к банке. Круг замкнулся.</p></div>
+      <div class="effect"><h3>Нервы</h3><p>Тревожность, раздражительность, трудно сосредоточиться. На контрольной это мешает больше, чем помогает.</p></div>
+      <div class="effect"><h3>Сахар</h3><p>Резкий скачок сахара в крови, потом такое же резкое падение. Плюс зубы и лишний вес.</p></div>
+      <div class="effect"><h3>Привыкание</h3><p>Со временем для того же эффекта нужно больше. Если резко бросить, пару дней болит голова и нет сил.</p></div>
+      <div class="effect"><h3>С алкоголем</h3><p>Совсем плохая идея: кофеин маскирует опьянение, и человек не понимает, сколько выпил.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Если правда нужно взбодриться</h2>
+    <ul class="plain">
+      <li>Лечь на час раньше. Скучно, но работает лучше любой банки.</li>
+      <li>Выпить воды: лёгкое обезвоживание тоже даёт вялость.</li>
+      <li>Выйти на 10 минут на улицу или подвигаться.</li>
+      <li>Нормально поесть: каша, бутерброд, фрукт.</li>
+      <li>Делать перерывы в учёбе каждые 40–50 минут.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="law">
+      <h2>Что говорит закон</h2>
+      <p>С 1 марта 2025 года в России запрещено продавать энергетики людям младше 18 лет (Федеральный закон № 304-ФЗ). Продавец может попросить паспорт, а с 7 июня 2025 года за продажу несовершеннолетним магазину грозит штраф до 500 000 рублей.</p>
+      <p>Закон приняли не просто так: врачи давно предупреждают, что для подростков риски выше, чем для взрослых.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Брошюра сделана как продукт индивидуального проекта по биологии «Влияние энергетических напитков на функциональное состояние организма подростка», 2026.</p>
+    <p>Источники:</p>
+    <ol>
+      <li>EFSA. Scientific Opinion on the safety of caffeine // EFSA Journal, 2015.</li>
+      <li>Seifert S. M. et al. Health effects of energy drinks on children, adolescents, and young adults // Pediatrics, 2011.</li>
+      <li>Visram S. et al. Consumption of energy drinks by children and young people: a rapid review // BMJ Open, 2016.</li>
+      <li>ВОЗ. Guideline: Sugars intake for adults and children, 2015.</li>
+      <li>Федеральный закон от 08.08.2024 № 304-ФЗ.</li>
+    </ol>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var t = $('t'), b = $('b');
+  for (var h = 6; h <= 23; h++) t.add(new Option(String(h).padStart(2, '0') + ':00', h, false, h === 18));
+  for (var h2 = 20; h2 <= 26; h2++) {
+    var lab = String(h2 % 24).padStart(2, '0') + ':00';
+    b.add(new Option(lab, h2, false, h2 === 23));
+  }
+  var HALF = 5;
+  function fmt(n) { return String(Math.round(n)); }
+
+  function draw(dose, sleepLim, hoursToBed) {
+    var svg = $('chart'), W = 600, H = 220, L = 44, R = 12, T = 14, B = 34;
+    var span = 14, maxY = Math.max(dose, sleepLim) * 1.1;
+    var x = function (hh) { return L + (W - L - R) * hh / span; };
+    var y = function (mg) { return T + (H - T - B) * (1 - mg / maxY); };
+    var pts = [];
+    for (var i = 0; i <= 56; i++) { var hh = span * i / 56; pts.push(x(hh).toFixed(1) + ',' + y(dose * Math.pow(.5, hh / HALF)).toFixed(1)); }
+    var startH = +t.value, bedX = x(Math.min(hoursToBed, span));
+    var ticks = '';
+    for (var k = 0; k <= span; k += 2) {
+      ticks += '<text x="' + x(k) + '" y="' + (H - 12) + '" text-anchor="middle" font-size="12" fill="var(--muted)">' + String((startH + k) % 24).padStart(2, '0') + ':00</text>';
+    }
+    svg.innerHTML =
+      '<line x1="' + L + '" y1="' + (H - B) + '" x2="' + (W - R) + '" y2="' + (H - B) + '" stroke="var(--line)"/>' +
+      '<line x1="' + L + '" y1="' + y(sleepLim) + '" x2="' + (W - R) + '" y2="' + y(sleepLim) + '" stroke="var(--warn)" stroke-dasharray="6 5"/>' +
+      '<text x="' + (W - R) + '" y="' + (y(sleepLim) - 6) + '" text-anchor="end" font-size="12" fill="var(--warn)">порог для сна ' + fmt(sleepLim) + ' мг</text>' +
+      (hoursToBed <= span ? '<line x1="' + bedX + '" y1="' + T + '" x2="' + bedX + '" y2="' + (H - B) + '" stroke="var(--ink)" stroke-width="1.5"/>' +
+        '<text x="' + (bedX + 6) + '" y="' + (T + 12) + '" font-size="12" fill="var(--ink)">сон</text>' : '') +
+      '<polyline points="' + pts.join(' ') + '" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round"/>' +
+      '<text x="' + (L - 6) + '" y="' + (y(dose) + 4) + '" text-anchor="end" font-size="12" fill="var(--muted)">' + fmt(dose) + '</text>' +
+      '<text x="' + (L - 6) + '" y="' + (H - B + 4) + '" text-anchor="end" font-size="12" fill="var(--muted)">0</text>' + ticks;
+  }
+
+  function update() {
+    var w = +$('w').value, v = +$('v').value, c = +$('c').value;
+    $('wOut').textContent = w + ' кг';
+    var dose = v / 1000 * c, lim = 3 * w, sleepLim = 1.5 * w;
+    var hrs = +b.value - +t.value; if (hrs < 0) hrs += 24;
+    var left = dose * Math.pow(.5, hrs / HALF);
+    var pct = dose / lim * 100;
+    $('dose').innerHTML = fmt(dose) + ' <small>мг кофеина в банке</small>';
+    $('bar').style.width = Math.min(pct, 100) + '%';
+    $('barWrap').classList.toggle('over', pct > 100);
+    $('pct').textContent = fmt(pct) + ' % от твоего дневного ориентира (' + fmt(lim) + ' мг)';
+    var bedLabel = String(+b.value % 24).padStart(2, '0') + ':00';
+    var msg = 'К ' + bedLabel + ' в крови останется около ' + fmt(left) + ' мг кофеина. ';
+    var vd = $('verdict');
+    if (left > sleepLim) {
+      msg += 'Это выше порога в ' + fmt(sleepLim) + ' мг, при котором сон уже может стать хуже.';
+      vd.className = 'verdict warn';
+    } else {
+      msg += 'Это ниже порога в ' + fmt(sleepLim) + ' мг, на сон банка должна повлиять меньше.';
+      vd.className = 'verdict';
+    }
+    if (pct > 100) msg += ' А вот дневной ориентир одна банка уже превышает.';
+    vd.textContent = msg;
+    draw(dose, sleepLim, hrs);
+  }
+  ['w', 'v', 'c', 't', 'b'].forEach(function (id) { $(id).addEventListener('input', update); });
+  update();
+})();
+</script>
+</body>
+</html>
